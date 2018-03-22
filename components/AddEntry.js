@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { getMetriMetaInfo, timeToString } from "../utils/helpers";
+import { getMetricMetaInfo, timeToString } from "../utils/helpers";
 import UdaciSlider from "./UdaciSlider";
 import UdaciStepper from "./UdaciStepper";
 import DateHeader from "./DateHeader";
+import { Ionicons } from "@expo/vector-icons";
+import TextButton from "./TextButton";
+import { submitEntry, removeEntry } from "../utils/api";
 
-function SubmitBtn({onPress}) {
-    return (
-        <TouchableOpacity onPress={onPress}>
-            <Text>SUBMIT</Text>
-        </TouchableOpacity>
-    )
+function SubmitBtn({ onPress }) {
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Text>SUBMIT</Text>
+    </TouchableOpacity>
+  );
 }
 
 export default class AddEntry extends Component {
@@ -23,7 +26,7 @@ export default class AddEntry extends Component {
   };
 
   increment = metric => {
-    const { max, step } = getMetriMetaInfo(metric);
+    const { max, step } = getMetricMetaInfo(metric);
 
     this.setState(state => {
       const count = state[metric] + step;
@@ -50,7 +53,6 @@ export default class AddEntry extends Component {
 
   slide = (metric, value) => {
     this.setState(() => ({
-      ...state,
       [metric]: value
     }));
 
@@ -63,24 +65,41 @@ export default class AddEntry extends Component {
 
     // Update Redux
 
-    this.setState(() => {
-        run: 0,
-        bike: 0,
-        swim: 0,
-        sleep: 0,
-        eat: 0
-    })
+    this.setState(() => ({
+      run: 0,
+      bike: 0,
+      swim: 0,
+      sleep: 0,
+      eat: 0
+    }));
+
+    //Navigate to home
+
+    submitEntry({key, entry})
+
+    //Clear local notification
+  };
+
+  reset = () => {
+    const key = timeToString();
 
     //Navigate to home
 
     //Save to "DB"
 
-    //Clear local notification
-
+    removeEntry(key)    
   };
-
   render() {
-    const metaInfo = getMetriMetaInfo();
+    const metaInfo = getMetricMetaInfo();
+    if (this.props.alreadyLogged) {
+      return (
+        <View>
+          <Ionicons name="ios-happy-outline" size={100} />
+          <Text>You already logged your information for today.</Text>
+          <TextButton onPress={this.reset}>Reset</TextButton>
+        </View>
+      );
+    }
     return (
       <View>
         {Object.keys(metaInfo).map(key => {

@@ -1,6 +1,6 @@
 // utils/helpers.js
 import React from "react";
-import { View } from "react-natvie";
+import { View } from "react-native";
 import {
   FontAwesome,
   MaterialIcons,
@@ -52,7 +52,7 @@ export function timeToString(time = Date.now()) {
   return todayUTC.toISOString().split("T")[0];
 }
 
-export function fetMetricMetaInfo(metric) {
+export function getMetricMetaInfo(metric) {
   const info = {
     run: {
       displayName: "Run",
