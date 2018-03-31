@@ -7,6 +7,8 @@ import DateHeader from "./DateHeader";
 import { Ionicons } from "@expo/vector-icons";
 import TextButton from "./TextButton";
 import { submitEntry, removeEntry } from "../utils/api";
+import { Connect } from "react-redux";
+import { AddEntry } from "../actions";
 
 function SubmitBtn({ onPress }) {
   return (
@@ -64,6 +66,9 @@ export default class AddEntry extends Component {
     const entry = this.state;
 
     // Update Redux
+    this.props.dispatch(addEntry({
+      
+    }))
 
     this.setState(() => ({
       run: 0,
