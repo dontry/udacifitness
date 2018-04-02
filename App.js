@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Platform, StatusBar } from "react-native";
+import { View, Text, StyleSheet, Platform, StatusBar,  } from "react-native";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./reducers";
@@ -12,6 +12,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Constants } from "expo";
 import Live from "./components/Live";
 import { setLocalNotification } from "./utils/helpers";
+import { ImagePicker, ImageEditor } from "expo";
 
 function UdaciStatusBar({ backgroundColor, ...props }) {
   return (
@@ -89,11 +90,12 @@ const MainNavigator = StackNavigator({
 
 export default class App extends React.Component {
   componentDidMount() {
-    setLocalNotification()
+    setLocalNotification();
   }
   handlePress = () => {
     alert("hello");
   };
+  
   render() {
     return (
       <Provider store={createStore(reducer)}>
@@ -105,3 +107,4 @@ export default class App extends React.Component {
     );
   }
 }
+
