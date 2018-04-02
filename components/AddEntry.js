@@ -17,10 +17,11 @@ import DateHeader from "./DateHeader";
 import { Ionicons } from "@expo/vector-icons";
 import TextButton from "./TextButton";
 import { submitEntry, removeEntry } from "../utils/api";
-import { Connect } from "react-redux";
 import { connect } from "react-redux";
 import { addEntry } from "../actions";
 import { white, purple } from "../utils/colors";
+import { NavigationActions } from "react-navigation";
+
 
 function SubmitBtn({ onPress }) {
   return (
@@ -90,6 +91,7 @@ class AddEntry extends Component {
     );
 
     //Navigate to home
+    this.toHome()
 
     this.setState(() => ({
       run: 0,
@@ -99,11 +101,8 @@ class AddEntry extends Component {
       eat: 0
     }));
 
-    //Navigate to home
-
     submitEntry({ key, entry });
 
-    //Clear local notification
   };
 
   reset = () => {
@@ -117,10 +116,15 @@ class AddEntry extends Component {
     );
 
     //Navigate to home
+    this.toHome();
 
     //Save to "DB"
     removeEntry(key);
   };
+
+  toHome = () => {
+    this.props.navigation.dispatch(NavigationActions.back({key: 'AddEntry'}))
+  }
   render() {
     const metaInfo = getMetricMetaInfo();
     if (this.props.alreadyLogged) {

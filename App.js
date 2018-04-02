@@ -4,18 +4,20 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./reducers";
 import AddEntry from "./components/AddEntry";
+import EntryDetail from "./components/EntryDetail";
 import History from "./components/History";
-import { TabNavigator } from "react-navigation";
+import { TabNavigator, StackNavigator } from "react-navigation";
 import { purple, white } from "./utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Constants } from "expo";
+import Live from "./components/Live";
 
-function UdaciStatusBar ({backgroundColor, ...props}) {
+function UdaciStatusBar({ backgroundColor, ...props }) {
   return (
-    <View style={{backgroundColor, height: Constants.statusBarHeight}}>
-    <StatusBar translucent backgroundColor={backgroundColor} {...props}/>
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
     </View>
-  )
+  );
 }
 
 const Tabs = TabNavigator(
@@ -37,6 +39,15 @@ const Tabs = TabNavigator(
           <FontAwesome name="plus-square" size={30} color={tintColor} />
         )
       }
+    },
+    Live: {
+      screen: Live,
+      navigationOptions: {
+        tabBarLabel: "Live",
+        tabBarIcon: ({ tintColor }) => (
+          <Ionicons name="ios-speedometer" size={30} color={tintColor} />
+        )
+      }
     }
   },
   {
@@ -46,7 +57,7 @@ const Tabs = TabNavigator(
     tabBarOptions: {
       activeTintColor: Platform.OS === "ios" ? purple : white,
       style: {
-        height: 16,
+        height: 56,
         backgroundColor: Platform.OS === "ios" ? white : purple,
         shadowColor: "rgba(0,0,0, 0.24)",
         shadowOffset: {
@@ -60,6 +71,21 @@ const Tabs = TabNavigator(
   }
 );
 
+const MainNavigator = StackNavigator({
+  Home: {
+    screen: Tabs
+  },
+  EntryDetail: {
+    screen: EntryDetail,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple
+      }
+    }
+  }
+});
+
 export default class App extends React.Component {
   handlePress = () => {
     alert("hello");
@@ -69,7 +95,7 @@ export default class App extends React.Component {
       <Provider store={createStore(reducer)}>
         <View style={{ flex: 1 }}>
           <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
-          <Tabs />
+          <MainNavigator />
         </View>
       </Provider>
     );
