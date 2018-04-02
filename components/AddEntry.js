@@ -9,7 +9,9 @@ import {
 import {
   getMetricMetaInfo,
   timeToString,
-  getDailyReminderValue
+  getDailyReminderValue,
+  clearLocalNotificaition,
+  setLocalNotification
 } from "../utils/helpers";
 import UdaciSlider from "./UdaciSlider";
 import UdaciStepper from "./UdaciStepper";
@@ -21,7 +23,6 @@ import { connect } from "react-redux";
 import { addEntry } from "../actions";
 import { white, purple } from "../utils/colors";
 import { NavigationActions } from "react-navigation";
-
 
 function SubmitBtn({ onPress }) {
   return (
@@ -91,7 +92,7 @@ class AddEntry extends Component {
     );
 
     //Navigate to home
-    this.toHome()
+    this.toHome();
 
     this.setState(() => ({
       run: 0,
@@ -103,6 +104,8 @@ class AddEntry extends Component {
 
     submitEntry({ key, entry });
 
+    //Clear local notification
+    clearLocalNotificaition().then(setLocalNotification);
   };
 
   reset = () => {
@@ -123,8 +126,8 @@ class AddEntry extends Component {
   };
 
   toHome = () => {
-    this.props.navigation.dispatch(NavigationActions.back({key: 'AddEntry'}))
-  }
+    this.props.navigation.dispatch(NavigationActions.back({ key: "AddEntry" }));
+  };
   render() {
     const metaInfo = getMetricMetaInfo();
     if (this.props.alreadyLogged) {
@@ -143,7 +146,7 @@ class AddEntry extends Component {
     }
     return (
       <View style={styles.container}>
-      <DateHeader date={(new Date()).toLocaleDateString()} />
+        <DateHeader date={new Date().toLocaleDateString()} />
         {Object.keys(metaInfo).map(key => {
           const { getIcon, type, ...rest } = metaInfo[key];
           const value = this.state[key];
@@ -183,7 +186,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     flex: 1,
-   alignItems: "center"
+    alignItems: "center"
   },
   iosSubmitBtn: {
     backgroundColor: purple,
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
   },
   androidSubmitBtn: {
     backgroundColor: purple,
-    padding: '10px 30pxd  ',
+    padding: "10px 30pxd  ",
     height: 45,
     borderRadius: 2,
     alignSelf: "flex-end",
