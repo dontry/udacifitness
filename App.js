@@ -12,7 +12,6 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Constants } from "expo";
 import Live from "./components/Live";
 import { setLocalNotification } from "./utils/helpers";
-import { ImagePicker, ImageEditor } from "expo";
 
 function UdaciStatusBar({ backgroundColor, ...props }) {
   return (
